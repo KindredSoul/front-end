@@ -10,7 +10,7 @@ function App() {
 		<div className="App">
 			<TodoList />
 			<Route path="/register" component={SignupForm} />
-			{/* <Route path="/login"  /> */}
+			<Route path="/login"  />
 		</div>
 	);
 }
