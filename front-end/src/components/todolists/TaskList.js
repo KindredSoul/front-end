@@ -44,8 +44,9 @@ export const AddTaskForm = props => {
 		<Form inline>
 			<FormGroup>
 				<Label for="task" hidden>
-					Task
+					Task:
 				</Label>
+				{"	"}
 				<Input type="text" name="task" id="task" />
 			</FormGroup>{" "}
 			<FormGroup check>

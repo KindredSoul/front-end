@@ -11,7 +11,12 @@ import {
 	Modal,
 	ModalHeader,
 	ModalBody,
-	ModalFooter
+	ModalFooter,
+	Form,
+	FormGroup,
+	Label,
+	Input,
+	FormText
 } from "reactstrap";
 import classnames from "classnames";
 import { axiosWithAuth } from "../../utils/axiosWithAuth";
@@ -113,7 +118,26 @@ const Lists = props => {
 									<Modal isOpen={modal} toggle={toggle} className={className}>
 										<ModalHeader toggle={toggle}>Create an event task</ModalHeader>
 										<ModalBody>
-											<AddTaskForm />
+											<Form inline>
+												<FormGroup>
+													<Label for="task" hidden>
+														Task:
+													</Label>
+													{"	"}
+													<Input type="text" name="task" id="task" />
+												</FormGroup>{" "}
+												<FormGroup check>
+													<Label check>
+														<Input type="radio" name="radio1" /> Completed
+													</Label>
+												</FormGroup>
+												<FormGroup check>
+													<Label check>
+														<Input type="radio" name="radio1" defaultChecked /> Incomplete
+													</Label>
+												</FormGroup>{" "}
+												<Button>Submit</Button>
+											</Form>
 										</ModalBody>
 										<ModalFooter>
 											<Button color="primary" onClick={toggle}>
