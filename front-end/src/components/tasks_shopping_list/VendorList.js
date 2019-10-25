@@ -7,6 +7,8 @@ export const VendorList = props => {
 			<li>Name: {vendorName[0].toUpperCase() + vendorName.slice(1)}</li>
 			<div>Phone: {vendorPhone}</div>
 			<div>Email: {vendorEmail}</div>
+			<button>Edit</button>
+			<button>Delete</button>
 		</div>
 	);
 };

@@ -1,82 +1,69 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from "reactstrap";
+import {
+	TabContent,
+	TabPane,
+	Nav,
+	NavItem,
+	NavLink,
+	/*  Card, Button, CardTitle, CardText,*/ Row,
+	Col,
+	Button,
+	Modal,
+	ModalHeader,
+	ModalBody,
+	ModalFooter
+} from "reactstrap";
 import classnames from "classnames";
 import { axiosWithAuth } from "../../utils/axiosWithAuth";
 import { TaskList } from "./TaskList";
 import { ShoppingList } from "./ShoppingList";
 import { VendorList } from "./VendorList";
 
-const Lists = () => {
+const Lists = props => {
 	const [taskData, setTaskData] = useState([]);
 	const [shoppingData, setShoppingData] = useState([]);
 	const [vendorData, setVendorData] = useState([]);
 	const [activeTab, setActiveTab] = useState("1");
+	const [modal, setModal] = useState(false);
 
-	const toggle = tab => {
+	const toggleTab = tab => {
 		if (activeTab !== tab) setActiveTab(tab);
 	};
 
+	const toggle = () => setModal(!modal);
+
+	const { buttonLabel, className } = props;
+
 	useEffect(() => {
-		axios.all([
-			axiosWithAuth()
-				.get("/api/tasks")
-				.then(res => {
-					console.log(res);
-					setTaskData(res.data);
-				})
-				.catch(error => {
-					console.log(error);
-				}),
-			axiosWithAuth()
-				.get("/api/shopping")
-				.then(res => {
-					console.log(res);
-					setShoppingData(res.data);
-				})
-				.catch(error => {
-					console.log(error);
-				}),
-			axiosWithAuth()
-				.get("/api/vendors")
-				.then(res => {
-					console.log(res);
-					setVendorData(res.data);
-				})
-				.catch(error => {
-					console.log(error);
-				})
-		]);
+		axiosWithAuth()
+			.get("/api/tasks")
+			.then(res => {
+				console.log(res);
+				setTaskData(res.data);
+			})
+			.catch(error => {
+				console.log(error);
+			});
+		axiosWithAuth()
+			.get("/api/shopping")
+			.then(res => {
+				console.log(res);
+				setShoppingData(res.data);
+			})
+			.catch(error => {
+				console.log(error);
+			});
+		axiosWithAuth()
+			.get("/api/vendors")
+			.then(res => {
+				console.log(res);
+				setVendorData(res.data);
+			})
+			.catch(error => {
+				console.log(error);
+			});
 	}, []);
 
-	// return (
-	// 	<div>
-	// 		<div>
-	// 			<ol>
-	// 				{taskData.map(task => (
-	// 					<TaskList key={task.event_id} taskName={task.task_name} taskCompletion={task.task_completed} />
-	// 				))}
-	// 			</ol>
-	// 			<button>Add A Task</button>
-	// 		</div>
-	// 		<div>
-	// 			<ol>
-	// 				{shoppingData.map(item => (
-	// 					<ShoppingList key={item.event_id} itemName={item.item_name} itemPrice={item.item_price} itemStock={item.item_acquired} />
-	// 				))}
-	// 			</ol>
-	// 			<button>Add An Item</button>
-	// 		</div>
-	// 		<div>
-	// 			<ol>
-	// 				{vendorData.map(vendor => (
-	// 					<VendorList key={vendor.event_id} vendorName={vendor.vendor_name} vendorPhone={vendor.contact_number} vendorEmail={vendor.contact_email} />
-	// 				))}
-	// 			</ol>
-	// 			<button>Add A Vendor</button>
-	// 		</div>
-	// 	</div>
-	// );
 	return (
 		<div>
 			<Nav tabs>
@@ -84,7 +71,7 @@ const Lists = () => {
 					<NavLink
 						className={classnames({ active: activeTab === "1" })}
 						onClick={() => {
-							toggle("1");
+							toggleTab("1");
 						}}>
 						Tasks
 					</NavLink>
@@ -93,7 +80,7 @@ const Lists = () => {
 					<NavLink
 						className={classnames({ active: activeTab === "2" })}
 						onClick={() => {
-							toggle("2");
+							toggleTab("2");
 						}}>
 						Shopping List
 					</NavLink>
@@ -102,7 +89,7 @@ const Lists = () => {
 					<NavLink
 						className={classnames({ active: activeTab === "3" })}
 						onClick={() => {
-							toggle("3");
+							toggleTab("3");
 						}}>
 						Vendors
 					</NavLink>
@@ -119,7 +106,28 @@ const Lists = () => {
 										<TaskList key={task.event_id} taskName={task.task_name} taskCompletion={task.task_completed} />
 									))}
 								</ol>
-								<button>Add A Task</button>
+								<div>
+									<Button color="danger" onClick={toggle}>
+										Add A Task
+									</Button>
+									<Modal isOpen={modal} toggle={toggle} className={className}>
+										<ModalHeader toggle={toggle}>Modal title</ModalHeader>
+										<ModalBody>
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+											minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+											voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+											deserunt mollit anim id est laborum.
+										</ModalBody>
+										<ModalFooter>
+											<Button color="primary" onClick={toggle}>
+												Do Something
+											</Button>{" "}
+											<Button color="secondary" onClick={toggle}>
+												Cancel
+											</Button>
+										</ModalFooter>
+									</Modal>
+								</div>
 							</div>
 						</Col>
 					</Row>
@@ -134,16 +142,30 @@ const Lists = () => {
 										<ShoppingList key={item.event_id} itemName={item.item_name} itemPrice={item.item_price} itemStock={item.item_acquired} />
 									))}
 								</ol>
-								<button>Add An Item</button>
+								<div>
+									<Button color="danger" onClick={toggle}>
+										Add An Item
+									</Button>
+									<Modal isOpen={modal} toggle={toggle} className={className}>
+										<ModalHeader toggle={toggle}>Modal title</ModalHeader>
+										<ModalBody>
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+											minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+											voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+											deserunt mollit anim id est laborum.
+										</ModalBody>
+										<ModalFooter>
+											<Button color="primary" onClick={toggle}>
+												Do Something
+											</Button>{" "}
+											<Button color="secondary" onClick={toggle}>
+												Cancel
+											</Button>
+										</ModalFooter>
+									</Modal>
+								</div>
 							</div>
 						</Col>
-						{/* <Col sm="6">
-				  <Card body>
-					<CardTitle>Special Title Treatment</CardTitle>
-					<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-					<Button>Go somewhere</Button>
-				  </Card>
-				</Col> */}
 					</Row>
 				</TabPane>
 				<TabPane tabId="3">
@@ -156,7 +178,28 @@ const Lists = () => {
 										<VendorList key={vendor.event_id} vendorName={vendor.vendor_name} vendorPhone={vendor.contact_number} vendorEmail={vendor.contact_email} />
 									))}
 								</ol>
-								<button>Add A Vendor</button>
+								<div>
+									<Button color="danger" onClick={toggle}>
+										Add A Vendor
+									</Button>
+									<Modal isOpen={modal} toggle={toggle} className={className}>
+										<ModalHeader toggle={toggle}>Modal title</ModalHeader>
+										<ModalBody>
+											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+											minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+											voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+											deserunt mollit anim id est laborum.
+										</ModalBody>
+										<ModalFooter>
+											<Button color="primary" onClick={toggle}>
+												Do Something
+											</Button>{" "}
+											<Button color="secondary" onClick={toggle}>
+												Cancel
+											</Button>
+										</ModalFooter>
+									</Modal>
+								</div>
 							</div>
 						</Col>
 					</Row>

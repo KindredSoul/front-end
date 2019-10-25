@@ -6,6 +6,8 @@ export const TaskList = props => {
 		<div>
 			<li>Task: {taskName[0].toUpperCase() + taskName.slice(1)}</li>
 			<div>Completed: {taskCompletion ? "Yes" : "WIP"}</div>
+			<button>Edit</button>
+			<button>Delete</button>
 		</div>
 	);
 };
