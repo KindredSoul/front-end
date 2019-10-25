@@ -32,7 +32,7 @@ const Lists = props => {
 
 	const toggle = () => setModal(!modal);
 
-	const { buttonLabel, className } = props;
+	const { className } = props;
 
 	useEffect(() => {
 		axiosWithAuth()

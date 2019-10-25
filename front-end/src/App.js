@@ -1,8 +1,9 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import SignupForm from "./components/Onboard";
-import TodoList from "./components/tasks_shopping_list/TodoList";
+import TodoList from "./components/todolists/TodoList";
 
+import EventsList from "./components/EventsList";
 import "./App.css";
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
 		<div className="App">
 			<TodoList />
 			<Route path="/register" component={SignupForm} />
-			<Route path="/login"  />
+			<Route path="/login" />
 		</div>
 	);
 }
