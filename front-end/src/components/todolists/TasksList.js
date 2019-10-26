@@ -27,26 +27,38 @@ import { VendorList } from "./VendorList";
 
 const Lists = props => {
 	const [taskData, setTaskData] = useState([]);
+	const [newTask, setNewTask] = useState({
+		task_name: "",
+		task_completed: false
+	});
+	const [editTask, setEditTask] = useState({task_name: ""});
+
 	const [shoppingData, setShoppingData] = useState([]);
 	const [vendorData, setVendorData] = useState([]);
-	const [newData, setNewData] = useState({});
-	// State and handlers for reactstrap============================================================
+
 	const [activeTab, setActiveTab] = useState("1");
-	const [modal, setModal] = useState(false);
+
+	const [taskModal, setTaskModal] = useState(false);
+	const [shopModal, setShopModal] = useState(false);
+	const [vendModal, setVendModal] = useState(false);
 
 	const toggleTab = tab => {
 		if (activeTab !== tab) setActiveTab(tab);
 	};
 
-	const toggle = () => setModal(!modal);
+	const toggleTask = () => setTaskModal(!taskModal);
+	const toggleShop = () => setShopModal(!shopModal);
+	const toggleVend = () => setVendModal(!vendModal);
+
+	const addNewTask = () => {}
 
 	const { className, buttonLabel } = props;
-	// =============================================================================================
+
 	useEffect(() => {
 		let id = props.id;
 		console.log(id);
 		axiosWithAuth()
-			.get(`/api/tasks`)
+			.get(`/api/tasks/${id}`)
 			.then(res => {
 				console.log(res);
 				setTaskData(res.data);
@@ -117,44 +129,34 @@ const Lists = props => {
 									))}
 								</ol>
 								<div>
-									<Button color="primary" onClick={toggle}>
+									<Button color="primary" onClick={toggleTask}>
 										Add A Task{buttonLabel}
 									</Button>
-									<Modal isOpen={modal} toggle={toggle} className="createTask">
-										<ModalHeader toggle={toggle}>Create an event task</ModalHeader>
+									<Modal isOpen={taskModal} toggle={toggleTask} className="createTask">
+										<ModalHeader toggle={toggleTask}>Create an event task</ModalHeader>
 										<ModalBody>
 											<FormGroup>
-												<Label for="task" hidden>
-													Task:
-												</Label>
+												<Label for="task">Task:</Label>
 												{"	"}
 												<Input type="text" name="task" id="task" />
 											</FormGroup>{" "}
+											Task status:{"  "}
 											<FormGroup check>
-												<Label for="radio1" check>
-													Task status:
+												<Label check>
+													<Input type="radio" name="radio1" value="true" /> Completed
 												</Label>
-												<Input type="radio" name="radio1" value="true">
-													{" "}
-													Completed
-												</Input>
-												<Input type="radio" name="radio1" defaultChecked value="false">
-													{" "}
-													Incomplete
-												</Input>
 											</FormGroup>
-											{/* <FormGroup check>
+											<FormGroup check>
 												<Label check>
 													<Input type="radio" name="radio1" defaultChecked value="false" /> Incomplete
 												</Label>
-											</FormGroup>{" "} */}
-											<Button>Submit</Button>
+											</FormGroup>{" "}
 										</ModalBody>
 										<ModalFooter>
-											<Button color="primary" onClick={toggle}>
+											<Button color="primary" onClick={toggleShop}>
 												Submit
 											</Button>{" "}
-											<Button color="secondary" onClick={toggle}>
+											<Button color="secondary" onClick={toggleShop}>
 												Cancel
 											</Button>
 										</ModalFooter>
@@ -175,11 +177,11 @@ const Lists = props => {
 									))}
 								</ol>
 								<div>
-									<Button color="primary" onClick={toggle}>
+									<Button color="primary" onClick={toggleShop}>
 										Add An Item
 									</Button>
-									<Modal isOpen={modal} toggle={toggle} className="createItem">
-										<ModalHeader toggle={toggle}>Modal title</ModalHeader>
+									<Modal isOpen={shopModal} toggle={toggleShop} className="createItem">
+										<ModalHeader toggle={toggleShop}>Modal title</ModalHeader>
 										<ModalBody>
 											Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
 											minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
@@ -187,10 +189,10 @@ const Lists = props => {
 											deserunt mollit anim id est laborum.
 										</ModalBody>
 										<ModalFooter>
-											<Button color="primary" onClick={toggle}>
-												Do Something
+											<Button color="primary" onClick={toggleShop}>
+												Submit
 											</Button>{" "}
-											<Button color="secondary" onClick={toggle}>
+											<Button color="secondary" onClick={toggleShop}>
 												Cancel
 											</Button>
 										</ModalFooter>
@@ -211,36 +213,35 @@ const Lists = props => {
 									))}
 								</ol>
 								<div>
-									<Button color="primary" onClick={toggle}>
+									<Button color="primary" onClick={toggleVend}>
 										Add A Vendor
 									</Button>
-									<Modal isOpen={modal} toggle={toggle} className="createVendor">
-										<ModalHeader toggle={toggle}>Modal title</ModalHeader>
+									<Modal isOpen={vendModal} toggle={toggleVend} className="createVendor">
+										<ModalHeader toggle={toggleVend}>Vendor Information</ModalHeader>
 										<ModalBody>
 											<FormGroup>
-												<Label for="task" hidden>
+												<Label for="vendorName" hidden>
 													Task:
 												</Label>
 												{"	"}
-												<Input type="text" name="task" id="task" />
-											</FormGroup>{" "}
-											<FormGroup check>
-												<Label check>
-													<Input type="radio" name="radio1" /> Completed
-												</Label>
+												<Input type="text" name="vendorName" id="vendorName" />
 											</FormGroup>
-											<FormGroup check>
-												<Label check>
-													<Input type="radio" name="radio1" defaultChecked /> Incomplete
-												</Label>
-											</FormGroup>{" "}
-											<Button>Submit</Button>
+											<FormGroup>
+												<Label for="vendorEmail">Email</Label>
+												{"  "}
+												<Input type="email" name="email" id="vendorEmail" placeholder="Email" />
+											</FormGroup>
+											<FormGroup>
+												<Label for="vendorContact">Phone Number</Label>
+												{"  "}
+												<Input type="number" name="contactNumber" id="vendorContact" placeholder="Contact Number" />
+											</FormGroup>
 										</ModalBody>
 										<ModalFooter>
-											<Button color="primary" onClick={toggle}>
-												Do Something
+											<Button color="primary" onClick={toggleVend}>
+												Submit
 											</Button>{" "}
-											<Button color="secondary" onClick={toggle}>
+											<Button color="secondary" onClick={toggleVend}>
 												Cancel
 											</Button>
 										</ModalFooter>

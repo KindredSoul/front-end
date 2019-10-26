@@ -10,7 +10,7 @@ function App() {
 	return (
 		<div className="App">
 			<Route path="/taskslist" exact component={TasksList} />
-			<PrivateRoute path="/taskslist/:id" render={props => <TasksList id={props.match.params.id} />} />
+			<PrivateRoute path="/taskslist/:id" render={props => <TasksList id={props.value.match.params.event_id} />} />
 			<PrivateRoute path="/eventslist" component={EventsList} />
 			<Route path="/register" component={SignupForm} />
 			<Route path="/login" component={Login} />
